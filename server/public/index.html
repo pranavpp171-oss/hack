@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Pulse | Never Miss What's Happening on Campus</title>
+  <meta name="description" content="Intelligent college announcement management platform powered by Google Gemini AI.">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%22%20100%22%20100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+  <!-- Tailwind CSS CDN with custom config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#0B0F19',
+              slate: '#111827',
+              card: '#161F30',
+              border: '#1E293B',
+              primary: '#6366F1',
+              secondary: '#8B5CF6',
+              accent: '#3B82F6',
+              cyan: '#06B6D4',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#0B0F19] text-slate-100 min-h-screen flex antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-64 border-r border-slate-800/80 bg-[#0F172A]/90 backdrop-blur-xl flex flex-col fixed inset-y-0 z-40 transition-all duration-300">
+    <!-- Brand Logo -->
+    <div class="p-6 border-b border-slate-800/80 flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('dashboard')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-blue-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <i data-lucide="radio" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+            CAMPUS <span class="text-indigo-400">PULSE</span>
+          </h1>
+          <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">AI Campus Intelligence</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Action "+ Add Notice" Button -->
+    <div class="px-5 pt-5 pb-2">
+      <button onclick="navigate('extractor')" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 transition-all active:scale-[0.98]">
+        <i data-lucide="sparkles" class="w-4 h-4 text-indigo-200"></i>
+        <span>AI Smart Extractor</span>
+      </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/60 hover:text-white">
+        <div class="flex items-center gap-3">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </div>
+      </button>
+
+      <button onclick="navigate('extractor')" id="nav-extractor" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/60 hover:text-white">
+        <div class="flex items-center gap-3">
+          <i data-lucide="scan-text" class="w-4 h-4"></i>
+          <span>Notice Extractor</span>
+        </div>
+        <span class="px-2 py-0.5 text-[10px] font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">AI Core</span>
+      </button>
+
+      <button onclick="navigate('calendar')" id="nav-calendar" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/60 hover:text-white">
+        <div class="flex items-center gap-3">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          <span>Smart Calendar</span>
+        </div>
+      </button>
+
+      <button onclick="navigate('announcements')" id="nav-announcements" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/60 hover:text-white">
+        <div class="flex items-center gap-3">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span>All Announcements</span>
+        </div>
+        <span id="nav-badge-total" class="px-2 py-0.5 text-[10px] font-medium bg-slate-800 text-slate-400 rounded-full">--</span>
+      </button>
+
+      <button onclick="navigate('weekly')" id="nav-weekly" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/60 hover:text-white">
+        <div class="flex items-center gap-3">
+          <i data-lucide="newspaper" class="w-4 h-4"></i>
+          <span>Weekly AI Summary</span>
+        </div>
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      </button>
+
+      <div class="pt-4 mt-4 border-t border-slate-800/60">
+        <button onclick="navigate('settings')" id="nav-settings" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/60 hover:text-white">
+          <div class="flex items-center gap-3">
+            <i data-lucide="settings-2" class="w-4 h-4"></i>
+            <span>Settings & AI Status</span>
+          </div>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Bottom Status Info Card -->
+    <div class="p-4 border-t border-slate-800/80">
+      <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800/80">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">AI Engine</span>
+          <span id="sidebar-ai-indicator" class="flex items-center gap-1.5 text-[11px] text-emerald-400 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            Online
+          </span>
+        </div>
+        <p id="sidebar-ai-desc" class="text-xs text-slate-300 truncate">Gemini 1.5 Flash</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Layout Area -->
+  <div class="flex-1 ml-64 flex flex-col min-h-screen">
+    <!-- Top Navigation Header -->
+    <header class="h-16 border-b border-slate-800/80 bg-[#0F172A]/70 backdrop-blur-xl px-8 flex items-center justify-between sticky top-0 z-30">
+      <!-- Search or Page Breadcrumb -->
+      <div class="flex items-center gap-4">
+        <div class="relative w-80 hidden md:block">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input 
+            type="text" 
+            id="global-search-input" 
+            placeholder="Search campus notices, workshops, exams..." 
+            class="w-full pl-9 pr-4 py-1.5 bg-slate-900/80 border border-slate-800 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+            onkeydown="if(event.key==='Enter') handleGlobalSearch(this.value)"
+          >
+        </div>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Live Date Pill -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs text-slate-400 font-medium">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span id="header-date">Today • Asia/Kolkata</span>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-900/80 border border-slate-800 text-slate-400 hover:text-white transition-colors" title="Toggle Light/Dark Theme">
+          <i data-lucide="sun-medium" id="theme-icon" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Quick Add Notice Button -->
+        <button onclick="openQuickAddModal()" class="py-1.5 px-3.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs flex items-center gap-1.5 transition-all shadow-md shadow-indigo-600/20 active:scale-95">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Add Notice</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main View Dynamic Outlet -->
+    <main id="main-content" class="flex-1 p-8">
+      <!-- Loaded dynamically via app.js -->
+    </main>
+  </div>
+
+  <!-- Announcement Details Modal -->
+  <div id="details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-black/75 backdrop-blur-sm modal-backdrop-anim" onclick="closeDetailsModal()"></div>
+    <div class="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 overflow-hidden modal-content-anim z-10 max-h-[90vh] flex flex-col">
+      <div id="details-modal-body" class="overflow-y-auto space-y-4">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Notice Modal -->
+  <div id="edit-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-black/75 backdrop-blur-sm modal-backdrop-anim" onclick="closeEditModal()"></div>
+    <div class="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 overflow-hidden modal-content-anim z-10 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="edit-3" class="w-5 h-5 text-indigo-400"></i>
+          Edit Campus Announcement
+        </h3>
+        <button onclick="closeEditModal()" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form id="edit-notice-form" onsubmit="handleSaveEditNotice(event)" class="overflow-y-auto space-y-4 pt-4 flex-1">
+        <!-- Rendered dynamically -->
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Application JS Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
+

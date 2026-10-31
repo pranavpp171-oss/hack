@@ -1,0 +1,12 @@
+{
+  "name": "campus-pulse",
+  "version": "1.0.0",
+  "description": "Campus Pulse - AI-Powered College Announcement Management Platform",
+  "main": "server/src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "tools\\node\\node.exe server\\src\\index.js",
+    "seed": "tools\\node\\node.exe server\\src\\seed.js"
+  }
+}
+

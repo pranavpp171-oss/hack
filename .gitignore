@@ -1,0 +1,30 @@
+# ==========================================
+# Campus Pulse - .gitignore
+# ==========================================
+
+# Node.js dependencies (reinstall with npm install)
+node_modules/
+server/node_modules/
+
+# Portable Node.js runtime (too large for git, see README for setup)
+tools/
+
+# SQLite database files (auto-generated on first run)
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+
+# Environment variables with secrets
+server/.env
+.env
+
+# Build and cache artifacts
+dist/
+build/
+.cache/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
